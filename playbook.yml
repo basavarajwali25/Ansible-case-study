@@ -1,0 +1,14 @@
+- hosts: web_servers
+  become : true
+  gather_facts: yes
+  
+  tasks:
+  
+  - include_role: 
+      name: roles/install-and-configure-tomcat
+    tags: tomcat
+      
+    
+  - include_role:
+      name: install-and-configure-maven
+    tags: maven

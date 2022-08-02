@@ -1,0 +1,19 @@
+  - name: updating repos
+    apt:
+      update_cache: true
+      force_apt_get: true
+    tags: always
+
+  - name: Transfer the script
+    copy:
+      src: script-maven.sh
+      dest: /root/script-maven.sh
+      owner: root
+      group: root
+      mode: 0777
+    tags: always
+
+  - name: Execute the script
+    become_user: root
+    command: sh script-maven.sh
+    tags: always

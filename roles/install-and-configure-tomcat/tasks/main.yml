@@ -1,0 +1,45 @@
+---
+  # - name: updating repos
+  #   apt:
+  #     update_cache: true
+  #     force_apt_get: true
+  #   tags: always
+
+  - name: install default jdk
+    apt:
+      name : openjdk-11-jdk
+      state: latest
+    tags: always
+
+  - name: Transfer the script
+    copy:
+      src: ~/script.sh
+      dest: /root/script.sh
+      owner: root
+      group: root
+      mode: 0777
+    tags: always
+
+  - name: Execute the script
+    become_user: root
+    command: sh script.sh
+    tags: always
+
+  - name: copying configurationfile
+    copy: 
+      src: tomcat.service
+      dest: "/etc/systemd/system/tomcat.service"
+    tags: always
+
+  - name: daemon reload and start tomcat
+    ansible.builtin.systemd:
+      state: restarted
+      daemon_reload: yes
+    tags: always
+  
+  - name: start tomcat 
+    ansible.builtin.systemd:
+      name: tomcat
+      state: started
+      enabled: true
+    tags: tomcat
